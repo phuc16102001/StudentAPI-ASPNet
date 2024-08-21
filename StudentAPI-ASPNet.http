@@ -1,0 +1,6 @@
+@StudentAPI_ASPNet_HostAddress = http://localhost:5053
+
+GET {{StudentAPI_ASPNet_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
