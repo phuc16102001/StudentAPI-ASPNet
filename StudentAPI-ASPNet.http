@@ -1,6 +1,43 @@
 @StudentAPI_ASPNet_HostAddress = http://localhost:5053
 
-GET {{StudentAPI_ASPNet_HostAddress}}/weatherforecast/
+GET {{StudentAPI_ASPNet_HostAddress}}/api/student
 Accept: application/json
 
 ###
+
+POST {{StudentAPI_ASPNet_HostAddress}}/api/student
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Phuc",
+  "isMale": true
+}
+
+###
+
+PUT {{StudentAPI_ASPNet_HostAddress}}/api/student
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": 2,
+  "name": "Phuc",
+  "isMale": true,
+  "email": "phuc16102001@gmail.com"
+}
+
+###
+
+GET {{StudentAPI_ASPNet_HostAddress}}/api/student/1
+Accept: application/json
+
+###
+
+GET {{StudentAPI_ASPNet_HostAddress}}/api/student/2
+Accept: application/json
+
+###
+
+DELETE {{StudentAPI_ASPNet_HostAddress}}/api/student/1
+Accept: application/json
