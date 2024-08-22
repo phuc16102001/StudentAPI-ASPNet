@@ -1,0 +1,36 @@
+@StudentAPI_ASPNet_HostAddress = http://localhost:5053
+
+GET {{StudentAPI_ASPNet_HostAddress}}/api/classroom
+Accept: application/json
+
+###
+
+POST {{StudentAPI_ASPNet_HostAddress}}/api/classroom
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "10A13"
+}
+
+###
+
+GET {{StudentAPI_ASPNet_HostAddress}}/api/classroom/1
+Accept: application/json
+
+###
+
+GET {{StudentAPI_ASPNet_HostAddress}}/api/classroom/2
+Accept: application/json
+
+###
+
+GET {{StudentAPI_ASPNet_HostAddress}}/api/classroom/1/students
+Accept: application/json
+
+###
+
+GET {{StudentAPI_ASPNet_HostAddress}}/api/classroom/2/students
+Accept: application/json
+
+###

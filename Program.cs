@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using StudentAPI_ASPNet.Data;
+using StudentAPI_ASPNet.Repository;
+using StudentAPI_ASPNet.Repository.Impl;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,9 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<IClassroomRepository, ClassroomRepository>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 

@@ -6,6 +6,7 @@
         public required string Name { get; set; }
         public required bool IsMale { get; set; }
         public string? Email { get; set; }
+        public Classroom Classroom { get; set; }
 
     }
 }

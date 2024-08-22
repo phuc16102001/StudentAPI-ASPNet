@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using StudentAPI_ASPNet.Data;
+using StudentAPI_ASPNet.Dto;
 using StudentAPI_ASPNet.Entities;
+using StudentAPI_ASPNet.Repository;
 
 namespace StudentAPI_ASPNet.Controllers
 {
@@ -11,74 +15,91 @@ namespace StudentAPI_ASPNet.Controllers
     public class StudentController : ControllerBase
     {
 
-        private readonly DataContext _dataContext;
+        private readonly IStudentRepository _studentRepository;
+        private readonly IClassroomRepository _classroomRepository;
+        private readonly IMapper _mapper;
 
-        public StudentController(DataContext dataContext)
+        public StudentController(IStudentRepository studentRepository, IClassroomRepository classroomRepository, IMapper mapper)
         {
-            _dataContext = dataContext;
+            _studentRepository = studentRepository;
+            _classroomRepository = classroomRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Student>>> GetAllStudents()
+        public IActionResult GetAllStudents()
         {
-            var students = await _dataContext.Students.ToListAsync();
-            return Ok(students);
+            var students = _studentRepository.GetAllStudents();
+            var studentsDto = _mapper.Map<List<StudentDto>>(students);
+            return Ok(studentsDto);
         }
 
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<Student>> GetStudent(int id)
+        public IActionResult GetStudent(int id)
         {
-            var student = await _dataContext.Students.FindAsync(id);
+            var student = _studentRepository.GetStudent(id);
             if (student is null)
             {
                 return NotFound($"Student not found with id={id}");
             }
-            return Ok(student);
+            var studentDto = _mapper.Map<StudentDto>(student);
+            return Ok(studentDto);
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<Student>>> AddStudent(Student student)
+        public IActionResult AddStudent([FromBody] StudentDto studentDto, [FromQuery] int classroomId)
         {
-            _dataContext.Students.Add(student);
-            await _dataContext.SaveChangesAsync();
-            return Ok(await _dataContext.Students.ToListAsync());
+            var student = _mapper.Map<Student>(studentDto);
+
+            var classroom = _classroomRepository.GetClassroom(classroomId);
+            if (classroom is null)
+            {
+                return NotFound($"Classroom not found with id={classroomId}");
+            }
+            student.Classroom = classroom;
+            _studentRepository.AddStudent(student, classroomId);
+            return Created();
         }
 
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<ActionResult<List<Student>>> DeleteStudent(int id)
+        public IActionResult DeleteStudent(int id)
         {
-            var student = await _dataContext.Students.FindAsync(id);
+            var student = _studentRepository.GetStudent(id);
             if (student is null)
             {
                 return NotFound($"Not found student with id={id}");
             }
-
-            _dataContext.Students.Remove(student);
-            await _dataContext.SaveChangesAsync();
-
-            return Ok(await _dataContext.Students.ToListAsync());
+            _studentRepository.RemoveStudent(student);
+            return Ok();
         }
 
         [HttpPut]
-        public async Task<ActionResult<List<Student>>> UpdateStudent(Student student)
+        public IActionResult UpdateStudent([FromBody] StudentDto studentDto, [FromQuery] int classroomId)
         {
-            var fetchedStudent = await _dataContext.Students.FindAsync(student.Id);
+            var student = _mapper.Map<Student>(studentDto);
+            var fetchedStudent = _studentRepository.GetStudent(student.Id);
             if (fetchedStudent is null)
             {
-                return NotFound($"Not found student with id={student.Id}");
+                return NotFound($"Student not found with id={student.Id}");
             }
 
+            var classroom = _classroomRepository.GetClassroom(classroomId);
+            if (classroom is null)
+            {
+                return NotFound($"Classroom not found with id={classroomId}");
+            }
+
+            fetchedStudent.Classroom = classroom;
             fetchedStudent.Name = student.Name;
-            fetchedStudent.Email = student.Email;
             fetchedStudent.IsMale = student.IsMale;
+            fetchedStudent.Email = student.Email;
 
-            await _dataContext.SaveChangesAsync();
-
-            return Ok(await _dataContext.Students.ToListAsync());
+            _studentRepository.UpdateStudent(fetchedStudent);
+            return Ok();
         }
 
     }

@@ -7,5 +7,6 @@ namespace StudentAPI_ASPNet.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         public DbSet<Student> Students { get; set; }
+        public DbSet<Classroom> Classrooms { get; set; }
     }
 }
