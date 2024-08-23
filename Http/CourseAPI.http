@@ -1,0 +1,37 @@
+@StudentAPI_ASPNet_HostAddress = http://localhost:5053
+
+GET {{StudentAPI_ASPNet_HostAddress}}/api/course
+Accept: application/json
+
+###
+
+GET {{StudentAPI_ASPNet_HostAddress}}/api/course/1
+Accept: application/json
+
+###
+
+GET {{StudentAPI_ASPNet_HostAddress}}/api/course/1/students
+Accept: application/json
+
+###
+
+POST {{StudentAPI_ASPNet_HostAddress}}/api/course
+Accept: application/json
+Content-Type: application/json
+
+{
+  "Name": "Data structure & Algorithms",
+  "Credit": 4
+}
+
+###
+
+PUT {{StudentAPI_ASPNet_HostAddress}}/api/course
+Accept: application/json
+Content-Type: application/json
+
+{
+  "Id": 2,
+  "Name": "Computer Vision",
+  "Credit": 3
+}

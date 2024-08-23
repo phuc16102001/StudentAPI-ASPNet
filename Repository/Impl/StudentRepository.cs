@@ -18,9 +18,25 @@ namespace StudentAPI_ASPNet.Repository.Impl
             return Saved();
         }
 
+        public bool EnrollStudentToCourse(Student student, Course course)
+        {
+            var studentCourse = new StudentCourse()
+            {
+                Student = student,
+                Course = course
+            };
+            _context.StudentCourses.Add(studentCourse);
+            return Saved();
+        }
+
         public ICollection<Student> GetAllStudents()
         {
             return _context.Students.ToList();
+        }
+
+        public ICollection<Course> GetEnrolledCourses(int studentId)
+        {
+            return _context.StudentCourses.Where(sc => sc.StudentId == studentId).Select(sc => sc.Course).ToList();
         }
 
         public Student GetStudent(int id)

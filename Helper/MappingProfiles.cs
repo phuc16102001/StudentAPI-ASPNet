@@ -12,6 +12,8 @@ namespace StudentAPI_ASPNet.Helper
             CreateMap<Student, StudentDto>();
             CreateMap<ClassroomDto, Classroom>();
             CreateMap<Classroom, ClassroomDto>();
+            CreateMap<CourseDto, Course>();
+            CreateMap<Course, CourseDto>();
         }
     }
 }

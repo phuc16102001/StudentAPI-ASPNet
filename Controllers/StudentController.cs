@@ -17,12 +17,15 @@ namespace StudentAPI_ASPNet.Controllers
 
         private readonly IStudentRepository _studentRepository;
         private readonly IClassroomRepository _classroomRepository;
+        private readonly ICourseRepository _courseRepository;
         private readonly IMapper _mapper;
 
-        public StudentController(IStudentRepository studentRepository, IClassroomRepository classroomRepository, IMapper mapper)
+        public StudentController(IStudentRepository studentRepository, IClassroomRepository classroomRepository, 
+            ICourseRepository courseRepository, IMapper mapper)
         {
             _studentRepository = studentRepository;
             _classroomRepository = classroomRepository;
+            _courseRepository = courseRepository;
             _mapper = mapper;
         }
 
@@ -102,5 +105,40 @@ namespace StudentAPI_ASPNet.Controllers
             return Ok();
         }
 
+        [HttpPost]
+        [Route("{id}/enroll")]
+        public IActionResult EnrollCourse(int id, [FromQuery] int courseId)
+        {
+            var student = _studentRepository.GetStudent(id);
+            if (student is null)
+            {
+                return NotFound($"Student not found with id={id}");
+            }
+
+            var course = _courseRepository.GetCourse(courseId);
+            if (course is null)
+            {
+                return NotFound($"Course not found with id={courseId}");
+            }
+
+            _studentRepository.EnrollStudentToCourse(student, course);
+            return Created();
+        }
+
+
+        [HttpGet]
+        [Route("{id}/courses")]
+        public IActionResult GetEnrolledCourses(int id)
+        {
+            var student = _studentRepository.GetStudent(id);
+            if (student is null)
+            {
+                return NotFound($"Student not found with id={id}");
+            }
+
+            var courses = _studentRepository.GetEnrolledCourses(id);
+            var coursesDto = _mapper.Map<List<CourseDto>>(courses);
+            return Ok(coursesDto);
+        }
     }
 }

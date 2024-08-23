@@ -9,5 +9,7 @@ namespace StudentAPI_ASPNet.Repository
         bool AddStudent(Student student, int classroomId);
         bool RemoveStudent(Student student);
         bool UpdateStudent(Student student);
+        bool EnrollStudentToCourse(Student student, Course course);
+        ICollection<Course> GetEnrolledCourses(int studentId);
     }
 }

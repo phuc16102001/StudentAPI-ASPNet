@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentAPI_ASPNet.Data;
 
@@ -10,9 +11,11 @@ using StudentAPI_ASPNet.Data;
 namespace StudentAPI_ASPNet.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240823104054_AddCourses")]
+    partial class AddCourses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,7 +73,7 @@ namespace StudentAPI_ASPNet.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Courses");
+                    b.ToTable("Course");
                 });
 
             modelBuilder.Entity("StudentAPI_ASPNet.Entities.Student", b =>
@@ -101,21 +104,6 @@ namespace StudentAPI_ASPNet.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("StudentAPI_ASPNet.Entities.StudentCourse", b =>
-                {
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.HasKey("StudentId", "CourseId");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("StudentCourses");
-                });
-
             modelBuilder.Entity("CourseStudent", b =>
                 {
                     b.HasOne("StudentAPI_ASPNet.Entities.Course", null)
@@ -140,25 +128,6 @@ namespace StudentAPI_ASPNet.Migrations
                         .IsRequired();
 
                     b.Navigation("Classroom");
-                });
-
-            modelBuilder.Entity("StudentAPI_ASPNet.Entities.StudentCourse", b =>
-                {
-                    b.HasOne("StudentAPI_ASPNet.Entities.Course", "Course")
-                        .WithMany()
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("StudentAPI_ASPNet.Entities.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("StudentAPI_ASPNet.Entities.Classroom", b =>
