@@ -125,6 +125,25 @@ namespace StudentAPI_ASPNet.Controllers
             return Created();
         }
 
+        [HttpPost]
+        [Route("{id}/unroll")]
+        public IActionResult UnrollCourse(int id, [FromQuery] int courseId)
+        {
+            var student = _studentRepository.GetStudent(id);
+            if (student is null)
+            {
+                return NotFound($"Student not found with id={id}");
+            }
+
+            var course = _courseRepository.GetCourse(courseId);
+            if (course is null)
+            {
+                return NotFound($"Course not found with id={courseId}");
+            }
+
+            _studentRepository.UnrollStudentFromCourse(student, course);
+            return Ok();
+        }
 
         [HttpGet]
         [Route("{id}/courses")]

@@ -50,6 +50,13 @@ namespace StudentAPI_ASPNet.Repository.Impl
             return Saved();
         }
 
+        public bool UnrollStudentFromCourse(Student student, Course course)
+        {
+            var studentCourse = _context.StudentCourses.Find(student.Id, course.Id);
+            _context.Remove(studentCourse);
+            return Saved();
+        }
+
         public bool UpdateStudent(Student student)
         {
             _context.Students.Update(student);

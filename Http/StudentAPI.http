@@ -77,3 +77,19 @@ Content-Type: application/json
 
 {}
 
+###
+
+POST {{StudentAPI_ASPNet_HostAddress}}/api/student/6/unroll?courseId=2
+Accept: application/json
+Content-Type: application/json
+
+{}
+
+
+###
+
+GET {{StudentAPI_ASPNet_HostAddress}}/api/student/6/courses
+Accept: application/json
+Content-Type: application/json
+
+{}

@@ -11,5 +11,6 @@ namespace StudentAPI_ASPNet.Repository
         bool UpdateStudent(Student student);
         bool EnrollStudentToCourse(Student student, Course course);
         ICollection<Course> GetEnrolledCourses(int studentId);
+        bool UnrollStudentFromCourse(Student student, Course course);
     }
 }
